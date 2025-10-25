@@ -63,8 +63,9 @@ def main(config_file):
 
 if __name__ == "__main__":
     sleep_seconds = int(os.getenv("SLEEP_SECONDS", "300"))  # default: 5 minutes
+    debug = os.getenv("DEBUG", "false").lower() == "true"
     while True:
-        if is_hkt_within_market_hours():
+        if is_hkt_within_market_hours() or debug:
             try:
                 main('config.ini')
             except Exception as e:
