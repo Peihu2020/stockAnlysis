@@ -10,7 +10,7 @@ services:
       - SLEEP_SECONDS=60  # 1 minute
       - DEBUG=true
       - INFLUX_URL=http://influxdb:8086
-      - INFLUX_TOKEN=your-influxdb-token
+      - INFLUX_TOKEN=JKRI_r_MR3CJjTvwmaQZCfKiF7WrhZUQBSQ4P37JJr2DvrchIZ_9O7fTTU0YvfclMUETABZzK7MRMJz-fR-fAA==
       - INFLUX_ORG=wangpeihu-albert
       - INFLUX_BUCKET=stock_kpi
     depends_on:
@@ -40,7 +40,7 @@ services:
       - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
       - DOCKER_INFLUXDB_INIT_ORG=wangpeihu-albert
       - DOCKER_INFLUXDB_INIT_BUCKET=stock_kpi
-      - DOCKER_INFLUXDB_INIT_TOKEN=your-influxdb-token
+      - DOCKER_INFLUXDB_INIT_TOKEN=JKRI_r_MR3CJjTvwmaQZCfKiF7WrhZUQBSQ4P37JJr2DvrchIZ_9O7fTTU0YvfclMUETABZzK7MRMJz-fR-fAA==
     restart: unless-stopped
 
   grafana:
