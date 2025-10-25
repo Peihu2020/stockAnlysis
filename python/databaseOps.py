@@ -1,5 +1,35 @@
+import os
 import sqlite3
 import json
+from influxdb_client import InfluxDBClient, Point, WritePrecision
+from influxdb_client.client.write_api import SYNCHRONOUS
+
+# InfluxDB config from Docker environment
+INFLUX_URL = os.getenv("INFLUX_URL", "http://influxdb:8086")
+INFLUX_TOKEN = os.getenv("INFLUX_TOKEN", "your-influxdb-token")
+INFLUX_ORG = os.getenv("INFLUX_ORG", "your-org-name")
+INFLUX_BUCKET = os.getenv("INFLUX_BUCKET", "stock_kpi")
+
+def save_results_to_influxdb(results):
+    client = InfluxDBClient(url=INFLUX_URL, token=INFLUX_TOKEN, org=INFLUX_ORG)
+    write_api = client.write_api(write_options=SYNCHRONOUS)
+
+    for code, data in results.items():
+        point = (
+            Point("kpi_result")
+            .tag("stock_code", code)
+            .field("current_price", data["current_price"])
+            .field("kpi_short", data["短线KPI"])
+            .field("kpi_long", data["长线KPI"])
+            .field("kpi_comprehensive", data["综合KPI"])
+            .field("percentage_changes", json.dumps(data["percentage_changes"], ensure_ascii=False))
+            .field("hsi_comparison", json.dumps(data["hsi_comparison"], ensure_ascii=False))
+            .time(data["analysis_datetime"], WritePrecision.S)
+        )
+        write_api.write(bucket=INFLUX_BUCKET, org=INFLUX_ORG, record=point)
+
+    client.close()
+
 
 def read_results_from_db():
     conn = sqlite3.connect('output/stock_kpi.db')
@@ -29,7 +59,6 @@ def read_results_from_db():
         }
 
     return results
-
 
 def save_results_to_db(results):
     conn = sqlite3.connect('output/stock_kpi.db')

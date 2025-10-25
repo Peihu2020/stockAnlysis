@@ -55,6 +55,7 @@ def main(config_file):
             'analysis_datetime': current_datetime
         }
 
+    save_results_to_influxdb(result)
     save_results_to_db(result)
     print(f"\n=== 股票分析结果 ({current_datetime}) ===")
     results = read_results_from_db()
