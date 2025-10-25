@@ -10,7 +10,7 @@ services:
       - SLEEP_SECONDS=60  # 1 minute
       - DEBUG=true
       - INFLUX_URL=http://influxdb:8086
-      - INFLUX_TOKEN=JKRI_r_MR3CJjTvwmaQZCfKiF7WrhZUQBSQ4P37JJr2DvrchIZ_9O7fTTU0YvfclMUETABZzK7MRMJz-fR-fAA==
+      - INFLUX_TOKEN=OU5NtSeFed30N9fSTRKwW_t_9-Jpo8dosKfxpupCwRH6cdBJ6DaO9um6sGdPdvveyc4vy6wNetjWkCdEzO4ygA==
       - INFLUX_ORG=wangpeihu-albert
       - INFLUX_BUCKET=stock_kpi
     depends_on:
