@@ -6,7 +6,7 @@
 from(bucket: "stock_kpi")
   |> range(start: -7d)
   |> filter(fn: (r) => r._measurement == "kpi_result")
-  |> filter(fn: (r) => r._field == "kpi_short" or r._field == "kpi_long" or r._field == "kpi_comprehensive")
+  |> filter(fn: (r) => r._field =~ /${kpi_type:regex}/)
   |> filter(fn: (r) => r.stock_code =~ /${stock_code:regex}/)
   |> aggregateWindow(every: ${interval}, fn: mean, createEmpty: false)
 ```
@@ -35,6 +35,14 @@ schema.tagValues(bucket: "stock_kpi", tag: "stock_code")
 
 ```
 10m, 30m, 1h, 6h, 12h, 1d, 7d, 14d, 30d
+```
+
+### `kpi_type` Variable
+
+**Options:**
+
+```
+kpi_short, kpi_long, kpi_comprehensive
 ```
 
 ---
