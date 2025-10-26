@@ -3,19 +3,37 @@ from plot import *
 from databaseOps import *
 from stockOps import *
 import time, os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def is_hkt_within_market_hours():
     # Convert current UTC time to HKT (UTC+8)
     utc_now = datetime.utcnow()
     hkt_now = utc_now + timedelta(hours=8)
+    logger.info(f"UTC time: {utc_now.strftime('%Y-%m-%d %H:%M:%S')}")
+    logger.info(f"HKT time: {hkt_now.strftime('%Y-%m-%d %H:%M:%S')}")
 
     # Check if it's a weekday (Monday=0, Sunday=6)
-    if hkt_now.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
+    weekday = hkt_now.weekday()
+    logger.info(f"HKT weekday: {weekday} ({hkt_now.strftime('%A')})")
+    if weekday >= 5:  # 5 = Saturday, 6 = Sunday
+        logger.info("Market is closed: weekend")
         return False
 
     # Check if time is within 9:00 to 16:59
     hkt_hour = hkt_now.hour
-    return 9 <= hkt_hour < 17
+    hkt_minute = hkt_now.minute
+    logger.info(f"HKT hour: {hkt_hour}, minute: {hkt_minute}")
+    if 9 <= hkt_hour < 17:
+        logger.info("Market is open")
+        return True
+    else:
+        logger.info("Market is closed: outside trading hours")
+        return False
+
 
 def main(config_file):
     current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
