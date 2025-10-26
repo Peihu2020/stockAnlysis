@@ -58,8 +58,8 @@ def main(config_file):
     save_results_to_influxdb(result)
     save_results_to_db(result)
     print(f"\n=== 股票分析结果 ({current_datetime}) ===")
-    results = read_results_from_db()
-    plot_kpi_trend(results)
+    # results = read_results_from_db()
+    # plot_kpi_trend(results)
 
 if __name__ == "__main__":
     sleep_seconds = int(os.getenv("SLEEP_SECONDS", "300"))  # default: 5 minutes
