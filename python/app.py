@@ -55,7 +55,9 @@ def main(config_file):
             if not historical_prices:
                 print(f"获取股票数据失败: {code}, 可能已退市或代码错误")
                 continue
-    
+            if len(historical_prices) < 100:
+                print(f"获取股票数据少于100天: {code}，跳过 ")
+                continue
             current_price = round(historical_prices[-1], 2)
             percentage_changes = calculate_percentage_change(current_price, historical_prices)
             hsi_comparison = calculate_hsi_comparison(hsi_current_price, hsi_prices)
@@ -96,4 +98,5 @@ if __name__ == "__main__":
             print("当前时间不在香港市场开放时间内，跳过执行。")
         print(f"等待 {sleep_seconds} 秒后再次检查...")
         time.sleep(sleep_seconds)
+
 
