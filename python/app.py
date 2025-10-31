@@ -50,19 +50,23 @@ def main(config_file):
     result = {}
 
     for code in stock_codes:
-        historical_prices = fetch_stock_data(code)
-        if not historical_prices:
-            print(f"获取股票数据失败: {code}, 可能已退市或代码错误")
+        try:
+            historical_prices = fetch_stock_data(code)
+            if not historical_prices:
+                print(f"获取股票数据失败: {code}, 可能已退市或代码错误")
+                continue
+    
+            current_price = round(historical_prices[-1], 2)
+            percentage_changes = calculate_percentage_change(current_price, historical_prices)
+            hsi_comparison = calculate_hsi_comparison(hsi_current_price, hsi_prices)
+    
+            short_term_kpi = calculate_short_term_kpi(percentage_changes, hsi_comparison)
+            long_term_kpi = calculate_long_term_kpi(percentage_changes, hsi_comparison)
+            comprehensive_kpi = calculate_comprehensive_kpi(short_term_kpi, long_term_kpi)
+        except Exception as e:
+            print(f"执行计算失败: {e}")
             continue
-
-        current_price = round(historical_prices[-1], 2)
-        percentage_changes = calculate_percentage_change(current_price, historical_prices)
-        hsi_comparison = calculate_hsi_comparison(hsi_current_price, hsi_prices)
-
-        short_term_kpi = calculate_short_term_kpi(percentage_changes, hsi_comparison)
-        long_term_kpi = calculate_long_term_kpi(percentage_changes, hsi_comparison)
-        comprehensive_kpi = calculate_comprehensive_kpi(short_term_kpi, long_term_kpi)
-
+            
         result[code] = {
             'current_price': current_price,
             'percentage_changes': percentage_changes,
@@ -92,3 +96,4 @@ if __name__ == "__main__":
             print("当前时间不在香港市场开放时间内，跳过执行。")
         print(f"等待 {sleep_seconds} 秒后再次检查...")
         time.sleep(sleep_seconds)
+
